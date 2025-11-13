@@ -5,11 +5,10 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
 
-    email: {
+    phone: {
       type: String,
       required: true,
       unique: true,
-      lowercase: true,
       trim: true,
     },
 
@@ -22,8 +21,8 @@ const userSchema = new mongoose.Schema(
       default: "User",
     },
 
-    // OTP fields for future OTP-based auth
-    otp: { type: String, default: null }, // store hashed OTP
+    // OTP fields
+    otp: { type: String, default: null },
     otpExpiresAt: { type: Date, default: null },
 
     // Account management
