@@ -1,35 +1,130 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.jsx - FIXED IMPORTS
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import Navbar from './components/Navbar/Navbar';
+import AuthModal from './components/AuthModal/AuthModal';
+import AdminAuthModal from './components/AdminAuthModal/AdminAuthModal';
+import Home from  "./Pages/Home"
+import About from './Pages/About';  // Changed from "./pages/About"
+import Contact from './Pages/Contact';  // Changed from "./pages/Contact"
+import UserDashboard from './components/Dashboard/UserDashboard';
+import HODDashboard from './components/Dashboard/HODDashboard';
+import CommissionerDashboard from './components/Dashboard/CommissionerDashboard';
+import AdminDashboard from './components/Dashboard/AdminDashboard';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showAdminAuthModal, setShowAdminAuthModal] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user is logged in on app load
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
+    setLoading(false);
+  }, []);
+
+  const handleLogin = (userData, token) => {
+    setUser(userData);
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setShowAuthModal(false);
+  };
+
+  const handleAdminLogin = (userData, token) => {
+    setUser(userData);
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setShowAdminAuthModal(false);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  };
+
+  const ProtectedRoute = ({ children, requiredRole }) => {
+    if (!user) {
+      return <Navigate to="/" />;
+    }
+    
+    if (requiredRole && user.role !== requiredRole) {
+      return <Navigate to="/" />;
+    }
+    
+    return children;
+  };
+
+  if (loading) {
+    return (
+      <div className="app-loading">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="app-container">
+        <Navbar 
+          user={user} 
+          onLoginClick={() => setShowAuthModal(true)} 
+          onAdminClick={() => setShowAdminAuthModal(true)}
+          onLogout={handleLogout}
+        />
+        
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                {user?.role === 'Admin' ? <AdminDashboard /> :
+                 user?.role === 'HOD' ? <HODDashboard /> : 
+                 user?.role === 'Commissioner' ? <CommissionerDashboard /> : 
+                 <UserDashboard />}
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin-dashboard" 
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+
+        {/* User Auth Modal - Only Login */}
+        <AuthModal 
+          show={showAuthModal}
+          onHide={() => setShowAuthModal(false)}
+          onLoginSuccess={handleLogin}
+        />
+
+        {/* Admin Auth Modal - Login/Register based on token */}
+        <AdminAuthModal 
+          show={showAdminAuthModal}
+          onHide={() => setShowAdminAuthModal(false)}
+          onLoginSuccess={handleAdminLogin}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

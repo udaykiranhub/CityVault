@@ -1,63 +1,20 @@
+// controllers/authController.js
 const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const sendOtpMsg91 = require("../utils/sendOtpMsg91"); // MSG91 helper
 
 // Generate JWT token
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET || "fallback_secret", {
     expiresIn: process.env.JWT_EXPIRES_IN || "7d",
   });
 };
 
 // ======================
-// REGISTER USER
-// ======================
-exports.register = async (req, res) => {
-  try {
-    const { name, phone, password, role } = req.body;
-
-    if (!name || !phone || !password)
-      return res.status(400).json({ message: "Missing fields" });
-
-    if (!/^[0-9]{10,15}$/.test(phone))
-      return res.status(400).json({ message: "Invalid phone number" });
-
-    if (password.length < 8)
-      return res.status(400).json({ message: "Password too short (min 8)" });
-
-    const existing = await User.findOne({ phone });
-    if (existing)
-      return res.status(400).json({ message: "Phone already registered" });
-
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
-
-    const user = await User.create({
-      name,
-      phone,
-      password: hashed,
-      role: role || "User",
-    });
-
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      phone: user.phone,
-      role: user.role,
-      message: "Registration successful. Now login with phone & password",
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Registration failed" });
-  }
-};
-
-// ======================
 // LOGIN (STEP 1: PASSWORD VALIDATION)
 // ======================
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { phone, password } = req.body;
     if (!phone || !password)
@@ -73,6 +30,7 @@ exports.login = async (req, res) => {
 
     // Generate OTP after password validation
     const otpPlain = (Math.floor(100000 + Math.random() * 900000)).toString(); // 6-digit
+    console.log("OTP is :",otpPlain)
     const salt = await bcrypt.genSalt(10);
     const otpHashed = await bcrypt.hash(otpPlain, salt);
 
@@ -82,7 +40,7 @@ exports.login = async (req, res) => {
 
     // Send OTP via MSG91
     const success = await sendOtpMsg91(phone, otpPlain);
-    console.log("Success of Msg91:",success);
+    console.log("Success of Msg91:", success);
 
     if (!success) return res.status(500).json({ message: "Failed to send OTP" });
 
@@ -98,13 +56,13 @@ exports.login = async (req, res) => {
 // ======================
 // VERIFY OTP (STEP 2: FINAL LOGIN)
 // ======================
-exports.verifyOtp = async (req, res) => {
+const verifyOtp = async (req, res) => {
   try {
     const { phone, otp } = req.body;
     if (!phone || !otp)
       return res.status(400).json({ message: "Missing fields" });
 
-    const user = await User.findOne({ phone }).select("+otp +otpExpiresAt +password");
+    const user = await User.findOne({ phone }).select("+otp +otpExpiresAt");
     if (!user || !user.otp)
       return res.status(400).json({ message: "No OTP requested" });
 
@@ -139,25 +97,9 @@ exports.verifyOtp = async (req, res) => {
 };
 
 // ======================
-// GET CURRENT USER PROFILE
+// REQUEST OTP
 // ======================
-exports.getProfile = async (req, res) => {
-  const user = req.user;
-  res.json({
-    _id: user._id,
-    name: user.name,
-    phone: user.phone,
-    role: user.role,
-    isVerified: user.isVerified,
-    isActive: user.isActive,
-    createdAt: user.createdAt,
-  });
-};
-
-
-
-// authController.js
-exports.requestOtp = async (req, res) => {
+const requestOtp = async (req, res) => {
   try {
     const { phone } = req.body;
     if (!phone) return res.status(400).json({ message: "Phone required" });
@@ -181,4 +123,28 @@ exports.requestOtp = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Failed to generate OTP" });
   }
+};
+
+// ======================
+// GET CURRENT USER PROFILE
+// ======================
+const getProfile = async (req, res) => {
+  const user = req.user;
+  res.json({
+    _id: user._id,
+    name: user.name,
+    phone: user.phone,
+    role: user.role,
+    isVerified: user.isVerified,
+    isActive: user.isActive,
+    createdAt: user.createdAt,
+  });
+};
+
+// Export all functions properly - REMOVE THE CIRCULAR DEPENDENCY
+module.exports = {
+  login,
+  verifyOtp,
+  requestOtp,
+  getProfile
 };

@@ -1,42 +1,69 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Admin Specific Styles */
+.modal-header-admin {
+  background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+  border-bottom: none;
+  padding: 1.5rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.modal-header-admin .btn-close {
+  filter: invert(1);
+  opacity: 0.8;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.modal-body-admin {
+  background: #f8f9fa;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.admin-auth-button {
+  background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+  color: #000;
+  font-weight: 600;
 }
 
-.card {
-  padding: 2em;
+.admin-auth-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+  background: linear-gradient(135deg, #e6ac00 0%, #e67e00 100%);
+  color: #000;
 }
 
-.read-the-docs {
-  color: #888;
+/* Fix background colors for better visibility */
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0c0c2b 0%, #1a1a3e 50%, #0c0c2b 100%);
+  color: #ffffff;
+}
+
+.neo-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.form-control-custom {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  color: #2d3748;
+}
+
+.form-control-custom:focus {
+  background: #ffffff;
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  color: #2d3748;
 }
