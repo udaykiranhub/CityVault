@@ -30,13 +30,13 @@ const Home = () => {
               >
                 Learn More
               </Button>
-              <Button 
+              {/* <Button 
                 variant="outline-light" 
                 size="lg" 
                 className="px-4"
               >
                 Get Started
-              </Button>
+              </Button> */}
             </div>
           </div>
         </Col>

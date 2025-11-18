@@ -72,7 +72,7 @@ const AdminDashboard = () => {
       filtered = filtered.filter(user =>
         user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.phone?.includes(searchQuery) ||
+       user.phone?.toString().includes(searchQuery)||
         user.department?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
