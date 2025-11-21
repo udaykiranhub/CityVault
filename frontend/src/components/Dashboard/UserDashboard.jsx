@@ -214,37 +214,123 @@ const UserDashboard = () => {
   };
 
   // Fetch dashboard stats
-  const fetchDashboardStats = async () => {
-    if (!contract || !account) {
-      console.log('❌ Cannot fetch stats: contract or account missing');
-      return;
-    }
+  // const fetchDashboardStats = async () => {
+  //   if (!contract || !account) {
+  //     console.log('❌ Cannot fetch stats: contract or account missing');
+  //     return;
+  //   }
 
-    try {
-      console.log('📊 Fetching dashboard stats...');
-      const stats = await contract.methods.getUserDashboardStats(account).call();
-      console.log('📈 Raw stats from contract:', stats);
+  //   try {
+  //     console.log('📊 Fetching dashboard stats...');
+  //     const stats = await contract.methods.getUserDashboardStats(account).call();
+  //     console.log('📈 Raw stats from contract:', stats);
       
-      const formattedStats = {
-        totalFiles: parseInt(stats.totalFiles) || 0,
-        pendingReview: parseInt(stats.pendingReview) || 0,
-        sentBack: parseInt(stats.sentBack) || 0,
-        approvedByHOD: parseInt(stats.approvedByHOD) || 0,
-        forwarded: parseInt(stats.forwarded) || 0,
-        approvedByCommissioner: parseInt(stats.approvedByCommissioner) || 0
-      };
+  //     const formattedStats = {
+  //       totalFiles: parseInt(stats.totalFiles) || 0,
+  //       pendingReview: parseInt(stats.pendingReview) || 0,
+  //       sentBack: parseInt(stats.sentBack) || 0,
+  //       approvedByHOD: parseInt(stats.approvedByHOD) || 0,
+  //       forwarded: parseInt(stats.forwarded) || 0,
+  //       approvedByCommissioner: parseInt(stats.approvedByCommissioner) || 0
+  //     };
       
-      console.log('📊 Formatted dashboard stats:', formattedStats);
-      setDashboardStats(formattedStats);
-    } catch (error) {
-      console.error('❌ Error fetching stats:', error);
-      console.error('Error details:', {
-        code: error.code,
-        message: error.message,
-        stack: error.stack
-      });
+  //     console.log('📊 Formatted dashboard stats:', formattedStats);
+  //     setDashboardStats(formattedStats);
+  //   } catch (error) {
+  //     console.error('❌ Error fetching stats:', error);
+  //     console.error('Error details:', {
+  //       code: error.code,
+  //       message: error.message,
+  //       stack: error.stack
+  //     });
+  //   }
+  // };
+
+  // Fetch dashboard stats - Manual calculation since contract function is failing
+const fetchDashboardStats = async () => {
+  if (!contract || !account) {
+    console.log('❌ Cannot fetch stats: contract or account missing');
+    return;
+  }
+
+  try {
+    console.log('📊 Calculating stats manually...');
+    
+    // Get total file count first
+    const totalFilesCount = await contract.methods.getFileCount().call();
+    console.log('📊 Total files in contract:', totalFilesCount);
+    
+    // Since getAllUserFiles is failing, we'll calculate stats from individual files
+    let totalFiles = 0;
+    let pendingReview = 0;
+    let sentBack = 0;
+    let approvedByHOD = 0;
+    let forwarded = 0;
+    let approvedByCommissioner = 0;
+
+    // Check files from ID 1001 to 1020 (adjust range as needed)
+    const startId = 1001;
+    const endId = startId + 20;
+    
+    for (let i = startId; i <= endId; i++) {
+      try {
+        const file = await contract.methods.files(i).call();
+        if (file.owner && file.owner.toLowerCase() === account.toLowerCase() && file.ipfsHash) {
+          totalFiles++;
+          
+          // Convert status to number and count
+          const status = parseInt(file.status);
+          switch(status) {
+            case 0: // Uploaded
+              break;
+            case 1: // Under Review
+              pendingReview++;
+              break;
+            case 2: // Sent Back
+              sentBack++;
+              break;
+            case 3: // Approved by HOD
+              approvedByHOD++;
+              break;
+            case 4: // Forwarded
+              forwarded++;
+              break;
+            case 5: // Commissioner Approved
+              approvedByCommissioner++;
+              break;
+          }
+        }
+      } catch (err) {
+        // File doesn't exist, continue
+      }
     }
-  };
+    
+    const formattedStats = {
+      totalFiles,
+      pendingReview,
+      sentBack,
+      approvedByHOD,
+      forwarded,
+      approvedByCommissioner
+    };
+    
+    console.log('✅ Manually calculated stats:', formattedStats);
+    setDashboardStats(formattedStats);
+    
+  } catch (error) {
+    console.error('❌ Error calculating stats manually:', error);
+    
+    // Set zeros on error
+    setDashboardStats({
+      totalFiles: 0,
+      pendingReview: 0,
+      sentBack: 0,
+      approvedByHOD: 0,
+      forwarded: 0,
+      approvedByCommissioner: 0
+    });
+  }
+};
 
   // Handle file upload
   const handleFileUpload = async (e) => {
