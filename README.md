@@ -1,4 +1,4 @@
-
+Here is the **same content with corrected alignment, spacing, formatting, and consistency** — clean and professional:
 
 ---
 
@@ -6,11 +6,9 @@
 
 CityVault is a decentralized file and workflow management platform built using:
 
-
-**Frontend:** React (Vite), React Bootstrap 
-**Backend:** Express.js, MongoDB ,Node js 
-**Blockchain:** Solidity, Foundry, IPFS ,Polygon ,IPFS storage ,Alchemy Node ,Anvil  
-
+* **Frontend:** React (Vite), React Bootstrap
+* **Backend:** Express.js, MongoDB, Node.js
+* **Blockchain:** Solidity, Foundry, IPFS, Polygon, IPFS Storage, Alchemy Node, Anvil
 
 The system supports **admin-created accounts**, OTP-based login, JWT authentication, and **role-based dashboards** for Users, HOD, and Commissioner.
 
@@ -21,9 +19,9 @@ The system supports **admin-created accounts**, OTP-based login, JWT authenticat
 ```
 CityVault/
 │
-├── backend/         # Express + MongoDB API
-├── contract/        # Solidity (Foundry)
-└── frontend/        # React (Vite)
+├── backend/        
+├── contract/       
+└── frontend/        
 ```
 
 ---
@@ -70,16 +68,17 @@ forge script script/CityVault.s.sol:CityVaultScript \
 
 ### **Authentication**
 
-* Admin creates all accounts (User/HOD/Commissioner)
+* Admin creates all accounts (User / HOD / Commissioner)
 * Login with credentials
 * OTP verification
+* JWT-based session handling
 
 ### **Role-Based Dashboards**
 
-* **User:** Upload to IPFS, send to HOD
+* **User:** Upload to IPFS → send to HOD
 * **HOD:** Review → forward
-* **Commissioner:** Final review
+* **Commissioner:** Final approval
 
 ---
 
-
+If you want, I can create a **fully polished README with badges, images, architecture diagram, and contribution guide**.
