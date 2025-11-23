@@ -6,10 +6,11 @@
 
 CityVault is a decentralized file and workflow management platform built using:
 
-* **Frontend:** React (Vite), React Bootstrap
-* **Backend:** Node.js, Express.js, MongoDB
-* **Smart Contracts:** Solidity (Foundry)
-* **Blockchain:** Local RPC (Anvil/Hardhat)
+
+**Frontend:** React (Vite), React Bootstrap 
+**Backend:** Express.js, MongoDB ,Node js 
+**Blockchain:** Solidity, Foundry, IPFS ,Polygon ,IPFS storage ,Alchemy Node ,Anvil  
+
 
 The system supports **admin-created accounts**, OTP-based login, JWT authentication, and **role-based dashboards** for Users, HOD, and Commissioner.
 
@@ -81,12 +82,4 @@ forge script script/CityVault.s.sol:CityVaultScript \
 
 ---
 
-## **🛠 Tech Stack**
-
-**Frontend:** React (Vite), React Bootstrap
-**Backend:** Express.js, MongoDB ,Node js 
-**Blockchain:** Solidity, Foundry, IPFS ,Polygon ,IPFS storage ,Alchemy Node 
-
----
----
 
