@@ -188,7 +188,7 @@ const AuthModal = ({ show, onHide, onLoginSuccess }) => {
                     name="otp"
                     value={otpData.otp}
                     onChange={handleOtpChange}
-                    placeholder="Enter 6-digit OTP"
+                    placeholder=""
                     required
                     className="form-control-custom text-center fs-3 fw-bold"
                     style={{letterSpacing: '0.5em'}}

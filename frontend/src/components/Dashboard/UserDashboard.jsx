@@ -766,7 +766,7 @@ const fetchDashboardStats = async () => {
 
       {/* Files Table */}
       <Row>
-        <Col>
+        {/* <Col>
           <Card className="neo-card border-0">
             <Card.Header className="bg-transparent border-bottom-0 py-3">
               <Row className="align-items-center">
@@ -856,7 +856,7 @@ const fetchDashboardStats = async () => {
               )}
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
       </Row>
 
       {/* Upload Modal */}
