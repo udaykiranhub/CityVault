@@ -40,7 +40,7 @@ export const Web3Provider = ({ children }) => {
         setAccount(accounts[0]);
         setContract(contractInstance);
         setIsConnected(true);
-
+console.log("COntract is :",contract)
         // Check user registration
         await checkUserRegistration(contractInstance, accounts[0]);
         

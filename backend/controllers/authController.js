@@ -88,6 +88,7 @@ const verifyOtp = async (req, res) => {
       name: user.name,
       phone: user.phone,
       role: user.role,
+      department: user.department, // Include this
       token,
     });
   } catch (err) {
