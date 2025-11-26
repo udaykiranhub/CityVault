@@ -1,7 +1,7 @@
 // Utils/constants.js
 import CityVaultABi from "./CityVault.json"
 
-export const CONTRACT_ADDRESS = "0x8464135c8F25Da09e49BC8782676a84730C318bC";
+export const CONTRACT_ADDRESS = "0x712516e61C8B383dF4A63CFe83d7701Bce54B03e";
 export const CONTRACT_ABI = CityVaultABi.abi;
 
 export const PINATA_API_KEY = "75c526e04508ec0f932a";

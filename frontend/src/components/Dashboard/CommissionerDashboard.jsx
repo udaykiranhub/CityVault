@@ -1554,13 +1554,13 @@ const CommissionerDashboard = () => {
               <Badge bg="primary" className="fs-6">
                 Commissioner: {formatAddress(account)}
               </Badge>
-              <Button 
+              {/* <Button 
                 variant="outline-light" 
                 size="sm"
                 onClick={() => navigate('/login')}
               >
                 Logout
-              </Button>
+              </Button> */}
             </div>
           </div>
         </Col>
