@@ -699,13 +699,13 @@ const HODDashboard = () => {
               <Badge bg="success" className="fs-6">
                 HOD: {formatAddress(account)}
               </Badge>
-              <Button 
+              {/* <Button 
                 variant="outline-light" 
                 size="sm"
                 onClick={() => navigate('/login')}
               >
                 Logout
-              </Button>
+              </Button> */}
             </div>
           </div>
         </Col>
