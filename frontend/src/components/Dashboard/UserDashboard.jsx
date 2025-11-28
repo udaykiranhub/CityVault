@@ -2268,7 +2268,7 @@ const UserDashboard = () => {
                             <strong className="text-primary">#{file.id}</strong>
                           </td>
                           <td className="border-0">
-                            <div className="text-white fw-bold">{file.fileName}</div>
+                            <div className="text-dark fw-bold">{file.fileName}</div>
                           </td>
                           <td className="border-0">
                             <InputGroup size="sm">
@@ -2289,7 +2289,7 @@ const UserDashboard = () => {
                           </td>
                           <td className="border-0">{getStatusBadge(file.status)}</td>
                           <td className="border-0">
-                            <small className="text-light">
+                            <small className="text-dark">
                               {formatTimestamp(file.uploadTimestamp)}
                             </small>
                           </td>
@@ -2297,7 +2297,7 @@ const UserDashboard = () => {
                             {file.hodRemark && file.hodRemark !== "" ? (
                               <small className="text-warning">{file.hodRemark}</small>
                             ) : (
-                              <small className="text-muted">-</small>
+                              <small className="text-dark">-</small>
                             )}
                           </td>
                           <td className="border-0">

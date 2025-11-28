@@ -1,6 +1,8 @@
 // Utils/constants.js
 import CityVaultABi from "./CityVault.json"
 
+
+//0x6f85143BB6451283Eea6eB3a629a0E5f0ca147C4-Polygon testnet
 export const CONTRACT_ADDRESS = "0x8464135c8F25Da09e49BC8782676a84730C318bC";
 export const CONTRACT_ABI = CityVaultABi.abi;
 
